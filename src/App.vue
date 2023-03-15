@@ -5,7 +5,7 @@
     </header>
     <form class="formAddRecipe" @submit.prevent="addRecipe">
       <input type="text" v-model="newRecipe" placeholder="Enter a new recipe...">
-      <button class="btnBlue">Add</button>
+      <button type="submit" class="btnBlue">Add</button>
     </form>
     <ul>
       <li class="oneRecipe" v-for="(recipe, index) in recipe" :key="index" @click="showRecipe(index)">
@@ -48,7 +48,21 @@
               {{ recipeInfo.description }}
             </div>
           </div>
-          <p class="recipeTitleIngredient">Ingrédients:</p>
+          <p class="recipeTitleIngredient">Ingredients:</p>
+          <!-- Ajout nouvel ingrédient -->
+          <form class="formAddRecipe" @submit.prevent="addIngredient">
+            <input type="text" v-model="newIngredient" placeholder="Enter a new ingredient...">
+            <button type="submit" class="btnBlue">Add</button>
+          </form>
+          <!-- Affiche les ingrédients de la recette -->
+          <ul>
+            <li class="oneRecipe" v-for="(ingredient, index) in ingredient" :key="index">
+              <div>
+                {{ ingredient }}
+                <button class="btnBlue" @click="deleteIngredient(index)">Delete</button>
+              </div>
+            </li>
+          </ul>
           <div class="buttonRecipe">
             <button class="btnWhite" @click="editRecipe(index)">Edit</button>
             <button class="btnBlue" @click="hideRecipe">Close</button> 
@@ -65,7 +79,9 @@
     data() {
         return {
           recipe: [],
+          ingredient: [],
           newRecipe: '',
+          newIngredient: '',
           editingRecipeIndex: null,
           editingRecipeValue: '',
           recipeCount: 0,
@@ -91,8 +107,17 @@
           this.newRecipe = '';
           }
       },
+      addIngredient() {
+          if (this.newIngredient.trim() !== '') {
+          this.ingredient.push(this.newIngredient.trim());
+          this.newIngredient = '';
+          }
+      },
       deleteRecipe(index) {
           this.recipe.splice(index, 1);
+      },
+      deleteIngredient(index) {
+          this.ingredient.splice(index, 1);
       },
       editRecipe(index) {
           this.editingRecipeIndex = index;
@@ -190,6 +215,7 @@ ul{
   background-color: #fff;
   padding: 20px;
   border-radius: 5px;
+  max-width: 500px;
 }
 
 .recipeInfo{
